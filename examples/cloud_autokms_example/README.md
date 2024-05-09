@@ -22,10 +22,10 @@ module "autokey" {
   parent_is_folder               = false                                    ## set to 'false' to use org as parent
   create_new_folder              = true                                     ## set to false to use existing folder
   folder_id                      = ""                                       ## provide folder_id if using existing folder
-  autokms_folder_name            = "autokms folder"                         ## applicable only if creating new folder, otherwise declare null
-  create_new_autokms_key_project = true                                     ## set to false to use existing project
-  autokms_key_project_name       = "autokms-project"                        ## must be 6 to 30 letters, digits, hyphens and start with a letter.; applicable only if creating new folder, otherwise declare null
-  autokms_key_project_id         = ""                                       ## update if using existing project
+  autokey_folder_name            = "autokey folder"                         ## applicable only if creating new folder, otherwise declare null
+  create_new_autokey_key_project = true                                     ## set to false to use existing project
+  autokey_key_project_name       = "autokey-project"                        ## must be 6 to 30 letters, digits, hyphens and start with a letter.; applicable only if creating new folder, otherwise declare null
+  autokey_key_project_id         = ""                                       ## update if using existing project
   create_new_resource_project    = true                                     ## update to 'false' to use an existing project
   resource_project_name          = "resource-project"                       ## must be 6 to 30 letters, digits, hyphens and start with a letter.; applicable only if creating new folder, otherwise declare null
   resource_project_id            = ""                                       ## update project_id if using existing project
