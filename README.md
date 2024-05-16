@@ -14,8 +14,8 @@ How to set up KMS Autokey:
 ```tf
 # Configure Cloud KMS Autokey
 module "autokey" {
-  #  source                              = "GoogleCloudPlatform/autokey/google"
-  source                         = "../../"
+  source                              = "GoogleCloudPlatform/terraform-google-autokey"
+  #source                         = "../../"
   billing_account                = ""
   organization_id                = ""
   parent_folder_id               = ""                                       # update folder_id
