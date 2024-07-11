@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
+module "project" {
+  source  = "terraform-google-modules/project-factory/google"
+  version = "~> 14.0"
 
-##  This code creates PoC example for KMS Autokey ##
-##  It is not developed for production workload ##
+  name              = "ci-cloud-ids"
+  random_project_id = "true"
+  org_id            = var.org_id
+  folder_id         = var.folder_id
+  billing_account   = var.billing_account
 
-
-terraform {
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "~> 4.0"
-    }
-     google-beta = {
-      source = "hashicorp/google-beta"
-    }
-  }
-  required_version = ">= 0.13"
-} 
+  activate_apis = [
+    "cloudresourcemanager.googleapis.com",
+    "iam.googleapis.com",
+    "ids.googleapis.com",
+    "storage-api.googleapis.com",
+    "servicenetworking.googleapis.com",
+    "serviceusage.googleapis.com",
+  ]
+}

@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-
 ##  This code creates PoC example for KMS Autokey ##
 ##  It is not developed for production workload ##
 
+/*
+output "autokey_config" {
+  description = "autokey_config"
 
-terraform {
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "~> 4.0"
-    }
-     google-beta = {
-      source = "hashicorp/google-beta"
-    }
-  }
-  required_version = ">= 0.13"
-} 
+  value = module.autokey.autokey_config
+}
+
+output "my_key_handle" {
+  description = "my_key_handle"
+
+  value = module.autokey.my_key_handle
+}
+*/

@@ -42,10 +42,10 @@ resource "time_sleep" "wait_enable_service_api_bq" {
 
 # Create autokey handle for BQ dataset
 resource "google_kms_key_handle" "bq_key_handle" {
-  provider               = google-beta
+  provider               = google-private
   project                = module.autokey.resource_project_id
   name                   = "bq-auto-key-handle"
-  location               = "us-central1"
+  location               = module.autokey.region
   resource_type_selector = "bigquery.googleapis.com/Dataset"
   depends_on = [
     module.autokey,
@@ -58,7 +58,7 @@ resource "google_kms_key_handle" "bq_key_handle" {
 # Create dataset in bigquery protected by autokey
 resource "google_bigquery_dataset" "dataset" {
   dataset_id                 = "dataset_${module.autokey.random_id}"
-  location                   = "us-central1"
+  location                   = module.autokey.region
   project                    = module.autokey.resource_project_id
   delete_contents_on_destroy = true
   default_encryption_configuration {

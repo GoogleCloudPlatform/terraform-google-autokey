@@ -116,3 +116,10 @@ variable "autokey_project_kms_admins" {
   type        = list(string)
   description = "List the users who should have the authority to manage crypto operations in the Key Management Project"
 }
+
+
+variable "region" {
+  type        = string
+  description = "Network region for resources"
+}
+

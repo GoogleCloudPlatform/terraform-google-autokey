@@ -12,20 +12,29 @@
 ##  See the License for the specific language governing permissions and
 ##  limitations under the License.
 
-terraform {
-  required_version = ">= 0.13"
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = ">= 3.53, < 6"
-    }
-     google-beta = {
-      source = "hashicorp/google-beta"
-    }
-  }
 
-  provider_meta "google" {
-    module_name = "GoogleCloudPlatform/terraform-google-autokey"
-  }
+output "autokey_config" {
+  description = "KMS Autokey config"
+  value       = google_kms_autokey_config.autokey_config
 }
 
+
+output "key_project_id" {
+  description = "key_project_id"
+  value       = data.google_project.key_project.project_id
+}
+
+output "resource_project_id" {
+  description = "resource_project_id"
+  value       = data.google_project.resource_project.project_id
+}
+
+output "region" {
+  description = "resources region "
+  value       = var.region
+}
+
+output "random_id" {
+  description = "random id"
+  value       = random_id.random_suffix.hex
+}

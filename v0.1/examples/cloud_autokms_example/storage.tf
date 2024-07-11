@@ -17,10 +17,10 @@
 
 # Create autokey handle for storage bucket
 resource "google_kms_key_handle" "gcs_key_handle" {
-  provider               = google-beta
+  provider               = google-private
   project                = module.autokey.resource_project_id
   name                   = "gcs-auto-key-handle"
-  location               = "us-east1"
+  location               = module.autokey.region
   resource_type_selector = "storage.googleapis.com/Bucket"
   depends_on             = [module.autokey]
 }
@@ -29,7 +29,7 @@ resource "google_kms_key_handle" "gcs_key_handle" {
 # Create storage bucket protected by autokey
 resource "google_storage_bucket" "simple_bucket_name" {
   name                        = "simple_bucket_${module.autokey.random_id}"
-  location                    = "us-east1"
+  location                    = module.autokey.region
   force_destroy               = true
   project                     = module.autokey.resource_project_id
   uniform_bucket_level_access = true

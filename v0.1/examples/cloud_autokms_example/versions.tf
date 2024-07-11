@@ -18,16 +18,23 @@
 ##  This code creates PoC example for KMS Autokey ##
 ##  It is not developed for production workload ##
 
-
+/*
 terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
       version = "~> 4.0"
     }
-     google-beta = {
-      source = "hashicorp/google-beta"
-    }
   }
   required_version = ">= 0.13"
-} 
+} */
+
+terraform {
+  required_providers {
+    google-private = {
+      source  = "google.com/providers/google-private"
+      version = "0.0.1844"
+    }
+  }
+}
+

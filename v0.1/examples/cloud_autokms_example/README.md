@@ -1,5 +1,5 @@
 # Cloud Auto KMS Terraform Module
-Autokey simplifies creating and managing customer encryption keys (CMEK) by automating provisioning and assignment.  With Autokey, your key rings, keys, and service accounts do not need to be pre-planned and provisioned. Instead, they are generated on demand as part of resource creation. This module makes it easy to set up [Auto KMS](https://cloud.google.com/kms/docs/autokey-overview).
+Autokey simplifies creating and managing customer encryption keys (CMEK) by automating provisioning and assignment.  With Autokey, your key rings, keys, and service accounts do not need to be pre-planned and provisioned. Instead, they are generated on demand as part of resource creation. This module makes it easy to set up [Auto KMS](https://LINK-TO-BE-UPDATED).
 
 How to set up KMS Autokey:
 - Choose an existing folder or create a new  resource folder.  You will be creating resource projects in this folder.  All of the resources created in these projects can use Autokey.
@@ -8,7 +8,6 @@ How to set up KMS Autokey:
 - Create and assign the Autokey service agent. 
 - Associate the Autokey folder with the Key project, through an Autokey configuration setting.
 - The Auto key is ready to be used in resource projects.
-- This example creates a BigQuery, Storage and Compute resource in three different US regions.
 
 ##  Usage
 
@@ -33,6 +32,7 @@ module "autokey" {
   autokey_folder_admins          = ["user:foo@example.com"] ## List the users who should have the authority to enable and configure Autokey at a folder level;  example user listing ["user:foo@example.com", "user:bar@example.com"]
   autokey_folder_users           = ["user:user:bar@example.com"] ## List the users who should have the authority to protect their resources with Autokey;  example user listing ["user:foo@example.com", "user:bar@example.com"]
   autokey_project_kms_admins     = ["user:user:bar@example.com"] ## List the users who should have the authority to manage crypto operations in the Key Management Project; example user listing ["user:foo@example.com", "user:bar@example.com"]
+  region                         = "us-central1"
 }
 
 ```

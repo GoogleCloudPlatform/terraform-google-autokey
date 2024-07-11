@@ -29,10 +29,6 @@ output "resource_project_id" {
   value       = data.google_project.resource_project.project_id
 }
 
-output "region" {
-  description = "resources region "
-  value       = var.region
-}
 
 output "random_id" {
   description = "random id"

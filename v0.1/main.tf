@@ -58,7 +58,7 @@ resource "google_project" "key_project" {
   count           = var.create_new_autokey_key_project ? 1 : 0
   billing_account = var.billing_account
 
-  folder_id   = var.create_new_folder ? google_folder.autokey_folder[count.index].name : "folders/${var.folder_id}"
+  folder_id   = var.create_new_folder ? google_folder.autokey_folder[count.index].name : "folders/${var.parent_folder_id}"
   name        = var.autokey_key_project_name
   project_id  = local.autokey_key_project_id
   skip_delete = var.skip_delete
@@ -69,7 +69,7 @@ resource "google_project" "key_project" {
 resource "google_project" "resource_project" {
   count           = var.create_new_resource_project ? 1 : 0
   billing_account = var.billing_account
-  folder_id       = var.create_new_folder ? google_folder.autokey_folder[count.index].name : "folders/${var.folder_id}"
+  folder_id       = var.create_new_folder ? google_folder.autokey_folder[count.index].name : "folders/${var.parent_folder_id}"
   name            = var.resource_project_name
   project_id      = local.resource_project_id
   skip_delete     = var.skip_delete
@@ -153,8 +153,8 @@ resource "time_sleep" "wait_srv_acc_priv" {
 
 resource "google_kms_autokey_config" "autokey_config" {
   count       = 1
-  provider    = google-beta
-  folder      = var.create_new_folder ? google_folder.autokey_folder[count.index].folder_id : "${var.folder_id}"
+  provider    = google-private
+  folder      = var.create_new_folder ? google_folder.autokey_folder[count.index].folder_id : "${var.parent_folder_id}"
   key_project = "projects/${local.autokey_key_project_number}"
   depends_on  = [time_sleep.wait_srv_acc_priv]
 }

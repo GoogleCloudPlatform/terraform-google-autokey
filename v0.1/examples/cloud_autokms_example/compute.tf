@@ -40,10 +40,10 @@ resource "time_sleep" "wait_enable_service_api_compute" {
 
 # Create autokey handle for compute disk 
 resource "google_kms_key_handle" "disk_key_handle" {
-  provider               = google-beta
+  provider               = google-private
   project                = module.autokey.resource_project_id
   name                   = "disk-auto-key-handle"
-  location               = "us-west1"
+  location               = module.autokey.region
   resource_type_selector = "compute.googleapis.com/Disk"
   depends_on = [
     module.autokey,
@@ -57,7 +57,7 @@ resource "google_compute_disk" "persistant_disk" {
   project                   = module.autokey.resource_project_id
   name                      = "persistant-disk"
   type                      = "pd-ssd"
-  zone                      = "us-west1-a"
+  zone                      = "us-central1-a"
   size                      = 30
   physical_block_size_bytes = 4096
   disk_encryption_key {
