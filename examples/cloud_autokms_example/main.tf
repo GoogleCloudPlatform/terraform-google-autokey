@@ -18,7 +18,7 @@
 
 
 
-/*
+
 # Configure Cloud KMS Autokey
 module "autokey" {
   #  source                              = "GoogleCloudPlatform/autokey/google"
@@ -39,27 +39,5 @@ module "autokey" {
   autokey_folder_admins          = ["user:foo@example.com"] ## List the users who should have the authority to enable and configure Autokey at a folder level;  example user listing ["user:foo@example.com", "user:bar@example.com"]
   autokey_folder_users           = ["user:user:bar@example.com"] ## List the users who should have the authority to protect their resources with Autokey;  example user listing ["user:foo@example.com", "user:bar@example.com"]
   autokey_project_kms_admins     = ["user:user:bar@example.com"] ## List the users who should have the authority to manage crypto operations in the Key Management Project; example user listing ["user:foo@example.com", "user:bar@example.com"]
-} */
-
-# Configure Cloud KMS Autokey
-module "autokey" {
-  #  source                              = "GoogleCloudPlatform/autokey/google"
-  source                         = "../../"
-  billing_account                = "01660F-E4C304-5C8D2B"
-  organization_id                = "873180247571"
-  parent_folder_id               = ""                                       ## update folder_id
-  parent_is_folder               = false                                    ## set to 'false' to use org as parent
-  create_new_folder              = true                                     ## set to false to use existing folder
-  folder_id                      = ""                                       ## provide folder_id if using existing folder
-  autokey_folder_name            = "autokey folder"                         ## applicable only if creating new folder, otherwise declare null
-  create_new_autokey_key_project = true                                     ## set to false to use existing project
-  autokey_key_project_name       = "autokey-project"                        ## must be 6 to 30 letters, digits, hyphens and start with a letter.; applicable only if creating new folder, otherwise declare null
-  autokey_key_project_id         = ""                                       ## update if using existing project
-  create_new_resource_project    = true                                     ## update to 'false' to use an existing project
-  resource_project_name          = "resource-project"                       ## must be 6 to 30 letters, digits, hyphens and start with a letter.; applicable only if creating new folder, otherwise declare null
-  resource_project_id            = ""                                       ## update project_id if using existing project
-  autokey_folder_admins          = ["user:admin@manishkgaur.altostrat.com"] ## List the users who should have the authority to enable and configure Autokey at a folder level;  example user listing ["user:foo@example.com", "user:bar@example.com"]
-  autokey_folder_users           = ["user:admin@manishkgaur.altostrat.com"] ## List the users who should have the authority to protect their resources with Autokey;  example user listing ["user:foo@example.com", "user:bar@example.com"]
-  autokey_project_kms_admins     = ["user:admin@manishkgaur.altostrat.com"] ## List the users who should have the authority to manage crypto operations in the Key Management Project; example user listing ["user:foo@example.com", "user:bar@example.com"]
-}
+} 
 
