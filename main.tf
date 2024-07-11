@@ -79,7 +79,7 @@ resource "google_project" "resource_project" {
 #Set permissions for key admins to use Autokey in this folder
 resource "google_folder_iam_binding" "autokey_folder_admin" {
   count   = 1
-  folder  = var.create_new_folder ? google_folder.autokey_folder[count.index].name : "folders/${var.parent_folder_id}"
+  folder  = var.create_new_folder ? google_folder.autokey_folder[count.index].name : "folders/${var.folder_id}"
   role    = "roles/cloudkms.autokeyAdmin"
   members = var.autokey_folder_admins
 }
@@ -87,7 +87,7 @@ resource "google_folder_iam_binding" "autokey_folder_admin" {
 #Set permissions for users to protect resources with Autokey in this folder
 resource "google_folder_iam_binding" "autokey_folder_users" {
   count   = 1
-  folder  = var.create_new_folder ? google_folder.autokey_folder[count.index].name : "folders/${var.parent_folder_id}"
+  folder  = var.create_new_folder ? google_folder.autokey_folder[count.index].name : "folders/${var.folder_id}"
   role    = "roles/cloudkms.autokeyUser"
   members = var.autokey_folder_users
 }
