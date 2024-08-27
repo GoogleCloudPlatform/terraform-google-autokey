@@ -23,9 +23,8 @@ locals {
   autokey_key_project_id     = var.create_new_autokey_key_project ? "${var.autokey_key_project_name}-${random_id.random_suffix.hex}" : var.autokey_key_project_id
   autokey_key_project_number = data.google_project.key_project.number
 
-  #  project ID for resource project
-  resource_project_id     = var.create_new_resource_project ? "${var.resource_project_name}-${random_id.random_suffix.hex}" : var.resource_project_id
-  resource_project_number = data.google_project.resource_project.number
+  # Prepping KMS Admins users and autokey service for KMS Admin Role
+  new_autokey_project_kms_admins = setunion(var.autokey_project_kms_admins, ["serviceAccount:service-${local.autokey_key_project_number}@gcp-sa-cloudkms.iam.gserviceaccount.com"])
 }
 
 
@@ -33,13 +32,6 @@ data "google_project" "key_project" {
   project_id = local.autokey_key_project_id
   depends_on = [google_project.key_project]
 }
-
-
-data "google_project" "resource_project" {
-  project_id = local.resource_project_id
-  depends_on = [google_project.resource_project]
-}
-
 
 
 
@@ -57,24 +49,14 @@ resource "google_folder" "autokey_folder" {
 resource "google_project" "key_project" {
   count           = var.create_new_autokey_key_project ? 1 : 0
   billing_account = var.billing_account
-
-  folder_id   = var.create_new_folder ? google_folder.autokey_folder[count.index].name : "folders/${var.folder_id}"
-  name        = var.autokey_key_project_name
-  project_id  = local.autokey_key_project_id
-  skip_delete = var.skip_delete
-  depends_on  = [google_folder.autokey_folder]
-}
-
-# Create the project
-resource "google_project" "resource_project" {
-  count           = var.create_new_resource_project ? 1 : 0
-  billing_account = var.billing_account
   folder_id       = var.create_new_folder ? google_folder.autokey_folder[count.index].name : "folders/${var.folder_id}"
-  name            = var.resource_project_name
-  project_id      = local.resource_project_id
+  name            = var.autokey_key_project_name
+  project_id      = local.autokey_key_project_id
   skip_delete     = var.skip_delete
   depends_on      = [google_folder.autokey_folder]
 }
+
+
 
 #Set permissions for key admins to use Autokey in this folder
 resource "google_folder_iam_binding" "autokey_folder_admin" {
@@ -90,15 +72,6 @@ resource "google_folder_iam_binding" "autokey_folder_users" {
   folder  = var.create_new_folder ? google_folder.autokey_folder[count.index].name : "folders/${var.folder_id}"
   role    = "roles/cloudkms.autokeyUser"
   members = var.autokey_folder_users
-}
-
-#Set permissions for key admins to use Autokey in this project
-resource "google_project_iam_binding" "autokey_project_admin" {
-  count      = 1
-  project    = local.autokey_key_project_id
-  role       = "roles/cloudkms.admin"
-  members    = var.autokey_project_kms_admins
-  depends_on = [google_project.key_project]
 }
 
 
@@ -134,21 +107,24 @@ resource "google_project_service_identity" "KMS_Service_Agent" {
   depends_on = [time_sleep.wait_enable_service_api]
 }
 
-
-
-#Grant the KMS Service Agent the Cloud KMS Admin role
-resource "google_project_iam_member" "autokey_project_admin" {
-  project    = local.autokey_key_project_id
-  role       = "roles/cloudkms.admin"
-  member     = "serviceAccount:service-${local.autokey_key_project_number}@gcp-sa-cloudkms.iam.gserviceaccount.com"
+#Set permissions for key admins and KMS Service Agent the Cloud KMS Admin role
+resource "google_project_iam_binding" "autokey_project_admin" {
+  count   = 1
+  project = local.autokey_key_project_id
+  role    = "roles/cloudkms.admin"
+  members = local.new_autokey_project_kms_admins
+  #["setunion(${var.autokey_project_kms_admins}, serviceAccount:service-${local.autokey_key_project_number}@gcp-sa-cloudkms.iam.gserviceaccount.com)"]
   depends_on = [google_project_service_identity.KMS_Service_Agent]
 }
+
+
+
 
 # Wait delay kms service account IAM permissions
 resource "time_sleep" "wait_srv_acc_priv" {
   create_duration = "15s"
   #  destroy_duration = "15s"
-  depends_on = [google_project_iam_member.autokey_project_admin]
+  depends_on = [google_project_iam_binding.autokey_project_admin]
 }
 
 resource "google_kms_autokey_config" "autokey_config" {

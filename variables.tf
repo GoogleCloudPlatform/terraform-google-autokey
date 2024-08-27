@@ -73,25 +73,6 @@ variable "autokey_key_project_id" {
   default     = null
 }
 
-variable "create_new_resource_project" {
-  description = " If true, the Terraform will create a new project for resources. If false, will use an existing project"
-  type        = bool
-  default     = true ## update to 'false' to use an existing project
-}
-
-variable "resource_project_name" {
-  type        = string
-  description = "Project name to deploy resources"
-  default     = "resource-project" # no spaces only aalowed to have characters, numbers and special characters
-
-}
-
-variable "resource_project_id" {
-  type        = string
-  description = "Project id to deploy resources"
-  default     = null
-}
-
 
 variable "skip_delete" {
   description = " If true, the Terraform resource can be deleted without deleting the Project via the Google API."
@@ -113,6 +94,6 @@ variable "autokey_folder_users" {
 
 
 variable "autokey_project_kms_admins" {
-  type        = list(string)
+  type        = set(string)
   description = "List the users who should have the authority to manage crypto operations in the Key Management Project"
 }

@@ -15,7 +15,7 @@
 
 output "autokey_config" {
   description = "KMS Autokey config"
-  value       = google_kms_autokey_config.autokey_config
+  value       = google_kms_autokey_config.autokey_config[0].id
 }
 
 
@@ -24,10 +24,6 @@ output "key_project_id" {
   value       = data.google_project.key_project.project_id
 }
 
-output "resource_project_id" {
-  description = "resource_project_id"
-  value       = data.google_project.resource_project.project_id
-}
 
 
 output "random_id" {

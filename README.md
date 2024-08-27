@@ -2,7 +2,7 @@
 Autokey simplifies creating and managing customer encryption keys (CMEK) by automating provisioning and assignment.  With Autokey, your key rings, keys, and service accounts do not need to be pre-planned and provisioned. Instead, they are generated on demand as part of resource creation. This module makes it easy to set up [Auto KMS](https://cloud.google.com/kms/docs/autokey-overview).
 
 How to set up KMS Autokey:
-- Choose an existing folder or create a new  resource folder.  You will be creating resource projects in this folder.  All of the resources created in these projects can use Autokey.
+- Choose an existing folder or create a new  folder.  You will be creating or using an existing key projects in this folder.  All of the resources created in these projects can use Autokey.
 - Choose the parent for the resource folder, either it can be root of the organization or any existing folder
 - Enable Cloud KMS API in the Autokey project.
 - Create and assign the Autokey service agent. 
@@ -26,9 +26,6 @@ module "autokey" {
   create_new_autokey_key_project = true                                     ## set to false to use existing project
   autokey_key_project_name       = "autokey-project"                        ## must be 6 to 30 letters, digits, hyphens and start with a letter.; applicable only if creating new folder, otherwise declare null
   autokey_key_project_id         = ""                                       ## update if using existing project
-  create_new_resource_project    = true                                     ## update to 'false' to use an existing project
-  resource_project_name          = "resource-project"                       ## must be 6 to 30 letters, digits, hyphens and start with a letter.; applicable only if creating new folder, otherwise declare null
-  resource_project_id            = ""                                       ## update project_id if using existing project
   autokey_folder_admins          = ["user:foo@example.com"] ## List the users who should have the authority to enable and configure Autokey at a folder level;  example user listing ["user:foo@example.com", "user:bar@example.com"]
   autokey_folder_users           = ["user:user:bar@example.com"] ## List the users who should have the authority to protect their resources with Autokey;  example user listing ["user:foo@example.com", "user:bar@example.com"]
   autokey_project_kms_admins     = ["user:user:bar@example.com"] ## List the users who should have the authority to manage crypto operations in the Key Management Project; example user listing ["user:foo@example.com", "user:bar@example.com"]
@@ -46,17 +43,14 @@ module "autokey" {
 | autokey\_folder\_users | List the users who should have the authority to protect their resources with Autokey | `list(string)` | n/a | yes |
 | autokey\_key\_project\_id | Project name to deploy resources | `string` | `null` | no |
 | autokey\_key\_project\_name | Project name to deploy resources | `string` | `"autokey-project"` | no |
-| autokey\_project\_kms\_admins | List the users who should have the authority to manage crypto operations in the Key Management Project | `list(string)` | n/a | yes |
+| autokey\_project\_kms\_admins | List the users who should have the authority to manage crypto operations in the Key Management Project | `set(string)` | n/a | yes |
 | billing\_account | billing account required | `string` | n/a | yes |
 | create\_new\_autokey\_key\_project | If true, the Terraform will create a new project for autokey key. If false, will use an existing project | `bool` | `true` | no |
 | create\_new\_folder | If true, the Terraform will create a new folder. If false, will use an existing folder | `bool` | `true` | no |
-| create\_new\_resource\_project | If true, the Terraform will create a new project for resources. If false, will use an existing project | `bool` | `true` | no |
 | folder\_id | Resource folders should use KMS Autokey | `string` | `null` | no |
 | organization\_id | Organization ID to add tags at Org level | `string` | n/a | yes |
 | parent\_folder\_id | Folder ID to create child folder for autokey | `string` | n/a | yes |
 | parent\_is\_folder | Folder ID to create child folder for autokey | `bool` | `true` | no |
-| resource\_project\_id | Project id to deploy resources | `string` | `null` | no |
-| resource\_project\_name | Project name to deploy resources | `string` | `"resource-project"` | no |
 | skip\_delete | If true, the Terraform resource can be deleted without deleting the Project via the Google API. | `string` | `"false"` | no |
 
 ## Outputs
@@ -66,7 +60,6 @@ module "autokey" {
 | autokey\_config | KMS Autokey config |
 | key\_project\_id | key\_project\_id |
 | random\_id | random id |
-| resource\_project\_id | resource\_project\_id |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
