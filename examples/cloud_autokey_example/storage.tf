@@ -33,7 +33,7 @@ resource "google_kms_key_handle" "gcs_key_handle" {
   resource_type_selector = "storage.googleapis.com/Bucket"
   depends_on = [
     module.autokey,
-    google_project.resource_project,
+    time_sleep.wait_enable_service,
   ]
 }
 
