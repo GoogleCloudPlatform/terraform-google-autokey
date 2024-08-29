@@ -30,7 +30,7 @@ resource "google_project_service" "bq_project_api_service" {
   disable_dependent_services = true
   depends_on = [
     module.autokey,
-    google_project.resource_project,
+    time_sleep.wait_enable_service,
   ]
 }
 
@@ -60,7 +60,8 @@ resource "google_kms_key_handle" "bq_key_handle" {
   resource_type_selector = "bigquery.googleapis.com/Dataset"
   depends_on = [
     module.autokey,
-    google_project_service.bq_project_api_service
+    google_project_service.bq_project_api_service,
+    time_sleep.wait_enable_service
   ]
 }
 
