@@ -15,7 +15,7 @@
 ##  This code creates PoC example for KMS Autokey ##
 ##  It is not developed for production workload ##
 
-
+/*
 # Configure Cloud KMS Autokey
 module "autokey" {
   #  source                              = "GoogleCloudPlatform/autokey/google"
@@ -33,6 +33,27 @@ module "autokey" {
   autokey_folder_admins          = ["user:foo@example.com"]      ## List the users who should have the authority to enable and configure Autokey at a folder level;  example user listing ["user:foo@example.com", "user:bar@example.com"]
   autokey_folder_users           = ["user:user:bar@example.com"] ## List the users who should have the authority to protect their resources with Autokey;  example user listing ["user:foo@example.com", "user:bar@example.com"]
   autokey_project_kms_admins     = ["user:user:bar@example.com"] ## List the users who should have the authority to manage crypto operations in the Key Management Project; example user listing ["user:foo@example.com", "user:bar@example.com"]
+}
+*/
+
+# Configure Cloud KMS Autokey
+module "autokey" {
+  #  source                              = "GoogleCloudPlatform/autokey/google"
+  source                         = "../../"
+  billing_account                = "01660F-E4C304-5C8D2B"
+  organization_id                = ""
+  parent_folder_id               = "276635808742"                           ## update folder_id
+  parent_is_folder               = true                                     ## set to 'false' to use org as parent
+  create_new_folder              = true                                     ## set to false to use existing folder
+  folder_id                      = ""                                       ## provide folder_id if using existing folder
+  autokey_folder_name            = "autokey folder"                         ## applicable only if creating new folder, otherwise declare null
+  create_new_autokey_key_project = true                                     ## set to false to use existing project
+  autokey_key_project_name       = "autokey-project"                        ## must be 6 to 30 letters, digits, hyphens and start with a letter.; applicable only if creating new folder, otherwise declare null
+  autokey_key_project_id         = ""                                       ## update if using existing project
+  autokey_folder_admins          = ["user:admin@manishkgaur.altostrat.com"] ## List the users who should have the authority to enable and configure Autokey at a folder level;  example user listing ["user:foo@example.com", "user:bar@example.com"]
+  autokey_folder_users           = ["user:admin@manishkgaur.altostrat.com"] ## List the users who should have the authority to protect their resources with Autokey;  example user listing ["user:foo@example.com", "user:bar@example.com"]
+  autokey_project_kms_admins     = ["user:admin@manishkgaur.altostrat.com"] ## List the users who should have the authority to manage crypto operations in the Key Management Project; example user listing ["user:foo@example.com", "user:bar@example.com"]
+  #  region                         = "us-central1"
 }
 
 
@@ -57,4 +78,12 @@ resource "google_project" "resource_project" {
   project_id      = local.resource_project_id
   skip_delete     = var.skip_delete
   depends_on      = [module.autokey]
+}
+
+
+# Wait delay after enabling APIs
+resource "time_sleep" "wait_enable_service" {
+  depends_on       = [google_project.resource_project]
+  create_duration  = "15s"
+  destroy_duration = "15s"
 }
