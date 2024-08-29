@@ -29,7 +29,7 @@ resource "google_project_service" "compute_project_api_service" {
   disable_dependent_services = true
   depends_on = [
     module.autokey,
-    google_project.resource_project,
+    time_sleep.wait_enable_service,
   ]
 }
 
